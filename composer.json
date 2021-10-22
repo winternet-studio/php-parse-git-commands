@@ -1,0 +1,17 @@
+{
+    "name": "winternet-studio/php-parse-git-commands",
+    "description": "PHP parsers and formatters for output from Git commands",
+    "type": "library",
+    "keywords": ["php", "git", "parser"],
+    "license": "MIT",
+    "authors": [ {
+            "name": "Allan Jensen",
+            "email": "github-repo@allanid.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "winternet\\phpGit\\": ""
+        }
+    }
+}
