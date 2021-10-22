@@ -5,7 +5,7 @@ PHP parsers and formatters for output from Git commands, eg. `git show`
 
 Using [composer](https://getcomposer.org/) install the [composer package]:
 
-    composer require winternet-studio/php-parse-git-commands "*"
+    composer require winternet-studio/php-parse-git-commands dev-main
 
 [composer package]: https://packagist.org/packages/winternet-studio/php-parse-git-commands "This package on packagist.org"
 
