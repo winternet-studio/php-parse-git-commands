@@ -23,11 +23,18 @@ class GitShow {
 		foreach ($lines as $line) {
 			$line = trim($line, "\r") ."\n";
 
-			if (preg_match("/^commit ([a-f0-9]{40})/", $line, $match) && (!$currProperty || $currProperty == 'unifiedDiff')) {  //must be first or come after unifiedDiff
+			if (preg_match("/^commit ([a-f0-9]{64}|[a-f0-9]{40})/", $line, $match) && (!$currProperty || $currProperty == 'message' || $currProperty == 'unifiedDiff')) {  //must be first or come after the previous commit
 				$currProperty = 'hash';
 				$line = $match[1];
 
 				$this->saveBuffer();
+				$this->propertyBuffers = [
+					'hash' => '',
+					'author' => '',
+					'timestamp' => '',
+					'message' => '',
+					'unifiedDiff' => '',
+				];
 
 			} elseif (preg_match("/^Author: (.*)/", $line, $match) && $currProperty == 'hash') {  //must come after hash
 				$currProperty = 'author';
@@ -50,7 +57,9 @@ class GitShow {
 				$line = preg_replace("/^\\s{4}/", '', $line);
 			}
 
-			$this->propertyBuffers[$currProperty] .= $line;
+			if ($currProperty !== null) {
+				$this->propertyBuffers[$currProperty] .= $line;
+			}
 		}
 
 		$this->saveBuffer();
@@ -59,7 +68,7 @@ class GitShow {
 	}
 
 	protected function saveBuffer() {
-		if (!empty($this->propertyBuffers)) {
+		if (isset($this->propertyBuffers['hash'])) {
 			// Store the previous record and prepare for new
 			$this->parsedData[] = $this->propertyBuffers;
 			$this->propertyBuffers = [];
